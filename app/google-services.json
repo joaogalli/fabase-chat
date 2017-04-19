@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "498909817165",
+    "firebase_url": "https://fabase-chat.firebaseio.com",
+    "project_id": "fabase-chat",
+    "storage_bucket": "fabase-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498909817165:android:e10a7eca7b414b80",
+        "android_client_info": {
+          "package_name": "com.gihub.joaogalli.fabase_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498909817165-518m80nuq4d8vudfadp44o8bsp75h2rv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gihub.joaogalli.fabase_chat",
+            "certificate_hash": "53c0fe4249c068304088795e3dbc9e227dd1b9cf"
+          }
+        },
+        {
+          "client_id": "498909817165-pvqqj763mb9vafg0hn2qh7mglplppvkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANT61RSk8Xhfcbmh5VaGU2bvAut19XLKc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "498909817165-pvqqj763mb9vafg0hn2qh7mglplppvkf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
