@@ -1,13 +1,17 @@
 package com.gihub.joaogalli.fabase_chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gihub.joaogalli.fabase_chat.model.Conversation;
+import com.gihub.joaogalli.fabase_chat.service.ConversationService;
+import com.gihub.joaogalli.fabase_chat.ui.conversationlist.ConversationListActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -18,11 +22,14 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -37,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private DatabaseReference mFirebaseDatabaseReference;
 
     private TextView userTextView;
+
+    private ConversationService conversationService;
+    private String testeEmail = "teste", ex1Email = "ex1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .build();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        conversationService = new ConversationService();
+
         verifyUser();
     }
 
@@ -87,19 +100,57 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         verifyUser();
                     }
                 });
-//                mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                        .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-//                        .addApi(Auth.GOOGLE_SIGN_IN_API)
-//                        .build();
                 break;
 
             case R.id.create_button:
                 Log.i(TAG, "Create Button");
+                conversationService.createConversation(testeEmail, ex1Email);
+                break;
+
+            case R.id.find_button:
+                Log.i(TAG, "Find or create");
+                conversationService.findOrCreateConversation(new ConversationService.Callback<Conversation>() {
+                    @Override
+                    public void onNext(Conversation conversation) {
+                        Toast.makeText(MainActivity.this, "Conversation: " + conversation, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                }, testeEmail, ex1Email);
+                break;
+
+            case R.id.read_button:
                 mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("conversations-details");
 
-                Map<String, Object> map = new HashMap<>();
-                map.put(mFirebaseDatabaseReference.push().getKey(), new Conversation("teste@teste.com", "ex1@teste.com"));
-                mFirebaseDatabaseReference.updateChildren(map);
+                // .child("contacts")
+                // .equalTo("teste@teste.com")
+                mFirebaseDatabaseReference.orderByChild("contacts").equalTo(testeEmail)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() != null) {
+                                    Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
+                                    Log.i(TAG, value.getClass().getSimpleName());
+
+                                    Set<Map.Entry<String, Object>> entries = value.entrySet();
+                                    for (Map.Entry<String, Object> entry : entries) {
+                                        Log.i(TAG, "Key: " + entry.getKey());
+                                    }
+                                } else {
+                                    Log.i(TAG, "empty");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.e(TAG, "error");
+                            }
+                        });
+                break;
+            case R.id.conversation_list_button:
+                startActivity(new Intent(this, ConversationListActivity.class));
                 break;
         }
     }

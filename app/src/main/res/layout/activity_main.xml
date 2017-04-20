@@ -30,11 +30,41 @@
         android:id="@+id/user_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/create_button"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:text="TextView"
+        android:onClick="onClick"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="130dp"/>
+
+    <Button
+        android:id="@+id/read_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Read"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/create_button"
+        android:layout_marginStart="18dp"
         android:onClick="onClick"/>
+
+    <Button
+        android:id="@+id/find_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find or Create"
+        android:layout_below="@+id/create_button"
+        android:layout_alignParentStart="true"
+        android:onClick="onClick"/>
+
+    <Button
+        android:id="@+id/conversation_list_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="18dp"
+        android:onClick="onClick"
+        android:text="List Conversations"/>
 
 </RelativeLayout>
