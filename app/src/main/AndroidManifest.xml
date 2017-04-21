@@ -9,15 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-        </activity>
-        <activity android:name=".ui.conversationlist.ConversationListActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".ui.conversationlist.ConversationListActivity" />
         <activity android:name=".ui.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:parentActivityName=".ui.conversationlist.ConversationListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gihub.joaogalli.fabase_chat.ui.conversationlist.ConversationListActivity" />
         </activity>
     </application>
 

@@ -2,6 +2,7 @@ package com.gihub.joaogalli.fabase_chat.ui.conversationlist;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +19,7 @@ import com.gihub.joaogalli.fabase_chat.FirebaseConstants;
 import com.gihub.joaogalli.fabase_chat.R;
 import com.gihub.joaogalli.fabase_chat.model.Conversation;
 import com.gihub.joaogalli.fabase_chat.service.ConversationService;
+import com.gihub.joaogalli.fabase_chat.ui.chat.ChatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,11 +30,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConversationListActivity extends AppCompatActivity implements ValueEventListener {
+public class ConversationListActivity extends AppCompatActivity implements ValueEventListener, ConversationListAdapter.UserInteractionListener {
 
     private ConversationListAdapter adapter;
 
     private ConversationService conversationService;
+
+    private EditText conversationCreationText;
+
+    private DatabaseReference conversationsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +49,10 @@ public class ConversationListActivity extends AppCompatActivity implements Value
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ConversationListAdapter();
+        adapter = new ConversationListAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        DatabaseReference conversationsRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.CONVERSATIONS_DETAILS);
+        conversationsRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.CONVERSATIONS_DETAILS);
         conversationsRef.addValueEventListener(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -57,8 +63,6 @@ public class ConversationListActivity extends AppCompatActivity implements Value
             }
         });
     }
-
-    private EditText conversationCreationText;
 
     public void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -96,6 +100,12 @@ public class ConversationListActivity extends AppCompatActivity implements Value
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        conversationsRef.removeEventListener(this);
+    }
+
+    @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         if (dataSnapshot.exists()) {
             Iterable<DataSnapshot> children = dataSnapshot.getChildren();
@@ -116,5 +126,14 @@ public class ConversationListActivity extends AppCompatActivity implements Value
 
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void onConversationSelect(Conversation conversation) {
+        // TODO adicionar usuário na conversation
+
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra(ChatActivity.CONVERSATION_PARAMETER, conversation);
+        startActivity(intent);
     }
 }

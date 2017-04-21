@@ -10,6 +10,6 @@ public abstract class FirebaseConstants {
 
     public static final String USER_CONVERSATIONS = "user-conversations";
 
-
-
+    public static final String CONVERSATIONS_MESSAGES = "conversations-messages";
+    public static final String CONVERSATIONS_MESSAGES_MESSAGES = "messages";
 }

@@ -7,6 +7,7 @@ import com.gihub.joaogalli.fabase_chat.counter.Counter;
 import com.gihub.joaogalli.fabase_chat.counter.SingleCounter;
 import com.gihub.joaogalli.fabase_chat.model.Conversation;
 import com.gihub.joaogalli.fabase_chat.model.UserConversations;
+import com.gihub.joaogalli.fabase_chat.ui.conversationlist.ConversationListActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
