@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
             case R.id.find_button:
                 Log.i(TAG, "Find or create");
-                conversationService.findOrCreateConversation(new ConversationService.Callback<Conversation>() {
+                conversationService.findOrCreateConversation("sei la", new ConversationService.Callback<Conversation>() {
                     @Override
                     public void onNext(Conversation conversation) {
                         Toast.makeText(MainActivity.this, "Conversation: " + conversation, Toast.LENGTH_SHORT).show();
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 break;
 
             case R.id.read_button:
-                mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("conversations-details");
+                mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference(FirebaseConstants.CONVERSATIONS_DETAILS);
 
                 // .child("contacts")
                 // .equalTo("teste@teste.com")

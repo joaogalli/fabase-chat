@@ -14,12 +14,15 @@ public class Conversation {
 
     private String id;
 
+    private String name;
+
     private List<String> contacts = new ArrayList<>();
 
     public Conversation() {
     }
 
-    public Conversation(String... cs) {
+    public Conversation(String name, String... cs) {
+        this.name = name;
         contacts.addAll(Arrays.asList(cs));
     }
 
@@ -37,5 +40,13 @@ public class Conversation {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -2,6 +2,7 @@ package com.gihub.joaogalli.fabase_chat.service;
 
 import android.util.Log;
 
+import com.gihub.joaogalli.fabase_chat.FirebaseConstants;
 import com.gihub.joaogalli.fabase_chat.counter.Counter;
 import com.gihub.joaogalli.fabase_chat.counter.SingleCounter;
 import com.gihub.joaogalli.fabase_chat.model.Conversation;
@@ -24,13 +25,9 @@ public class ConversationService {
 
     private static final String TAG = ConversationService.class.getSimpleName();
 
-    private static final String CONVERSATION_DETAILS = "conversations-details";
-
-    private static final String USER_CONVERSATIONS = "user-conversations";
-
-    public void findOrCreateConversation(final Callback<Conversation> callback, final String... users) {
+    public void findOrCreateConversation(final String conversationName, final Callback<Conversation> callback, final String... users) {
         final String mainUser = users[0];
-        DatabaseReference userConversations = FirebaseDatabase.getInstance().getReference(USER_CONVERSATIONS);
+        DatabaseReference userConversations = FirebaseDatabase.getInstance().getReference(FirebaseConstants.USER_CONVERSATIONS);
         userConversations.orderByKey().equalTo(mainUser)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -47,7 +44,7 @@ public class ConversationService {
                                         if (counter.getValue() != null) {
                                             callback.onNext(counter.getValue());
                                         } else {
-                                            createConversation(users);
+                                            createConversation(conversationName, users);
                                         }
                                     }
                                 });
@@ -69,7 +66,7 @@ public class ConversationService {
                                 }
                             }
                         } else {
-                            createConversation(users);
+                            createConversation(conversationName, users);
                         }
                     }
 
@@ -81,7 +78,7 @@ public class ConversationService {
     }
 
     public void doesConversationHaveUsers(final String conversationId, final Callback<Conversation> callback, final String... users) {
-        FirebaseDatabase.getInstance().getReference(CONVERSATION_DETAILS).orderByKey().equalTo(conversationId).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(FirebaseConstants.CONVERSATIONS_DETAILS).orderByKey().equalTo(conversationId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -104,18 +101,18 @@ public class ConversationService {
         });
     }
 
-    public void createConversation(String... users) {
+    public void createConversation(String conversationName, String... users) {
         String conversationId;
         {
-            DatabaseReference conversationsDetails = FirebaseDatabase.getInstance().getReference(CONVERSATION_DETAILS);
+            DatabaseReference conversationsDetails = FirebaseDatabase.getInstance().getReference(FirebaseConstants.CONVERSATIONS_DETAILS);
             Map<String, Object> map = new HashMap<>();
             conversationId = conversationsDetails.push().getKey();
-            map.put(conversationId, new Conversation(users));
+            map.put(conversationId, new Conversation(conversationName, users));
             conversationsDetails.updateChildren(map);
         }
 
         for (String user : users) {
-            DatabaseReference userConversations = FirebaseDatabase.getInstance().getReference(USER_CONVERSATIONS);
+            DatabaseReference userConversations = FirebaseDatabase.getInstance().getReference(FirebaseConstants.USER_CONVERSATIONS);
             userConversations.orderByKey().equalTo(user)
                     .addListenerForSingleValueEvent(new CreateUserConversationsValueEventListener(user, conversationId));
         }
@@ -126,7 +123,7 @@ public class ConversationService {
         void onComplete();
     }
 
-    private class CreateUserConversationsValueEventListener implements ValueEventListener {
+    public static class CreateUserConversationsValueEventListener implements ValueEventListener {
 
         private String userId;
         private String conversationId;
@@ -147,7 +144,7 @@ public class ConversationService {
                 }
                 userConversations.addConversation(conversationId);
 
-                DatabaseReference userConversationsRef = FirebaseDatabase.getInstance().getReference("user-conversations").child(userId);
+                DatabaseReference userConversationsRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.USER_CONVERSATIONS).child(userId);
                 userConversationsRef.setValue(userConversations);
         }
 

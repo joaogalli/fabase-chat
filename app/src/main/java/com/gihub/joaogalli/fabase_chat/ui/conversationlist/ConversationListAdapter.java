@@ -20,10 +20,18 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
 
     private List<Conversation> list = new ArrayList<>();
 
-    public ConversationListAdapter() {
+    private UserInteractionListener userInteractionListener;
+
+    public interface UserInteractionListener {
+        void onConversationSelect(Conversation conversation);
     }
 
-    public ConversationListAdapter(List<Conversation> list) {
+    public ConversationListAdapter(UserInteractionListener userInteractionListener) {
+        this.userInteractionListener = userInteractionListener;
+    }
+
+    public ConversationListAdapter(UserInteractionListener userInteractionListener, List<Conversation> list) {
+        this.userInteractionListener = userInteractionListener;
         this.list = list;
     }
 
@@ -37,16 +45,35 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mItem = list.get(position);
-        holder.idView.setText(holder.mItem.getId());
+        holder.idView.setText(holder.mItem.getName());
         holder.contactsView.setText(buildContactsText(holder.mItem.getContacts()));
+        holder.view.setOnClickListener(new ViewClickListener(position));
     }
 
     private String buildContactsText(List<String> contacts) {
-        StringBuilder sb = new StringBuilder();
-        for (String contact : contacts) {
-            sb.append(contact).append(", ");
+//        StringBuilder sb = new StringBuilder();
+//        for (String contact : contacts) {
+//            sb.append(contact).append(", ");
+//        }
+//        return sb.toString();
+
+        return contacts.size() + " usuário(s) registrado(s)";
+    }
+
+    private class ViewClickListener implements View.OnClickListener {
+
+        private int position;
+
+        public ViewClickListener(int position) {
+            this.position = position;
         }
-        return sb.toString();
+
+        @Override
+        public void onClick(View v) {
+            if (userInteractionListener != null) {
+                userInteractionListener.onConversationSelect(list.get(position));
+            }
+        }
     }
 
     @Override
