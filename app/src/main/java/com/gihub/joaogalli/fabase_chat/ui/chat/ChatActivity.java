@@ -17,7 +17,6 @@ import com.gihub.joaogalli.fabase_chat.FirebaseConstants;
 import com.gihub.joaogalli.fabase_chat.R;
 import com.gihub.joaogalli.fabase_chat.model.Conversation;
 import com.gihub.joaogalli.fabase_chat.model.Message;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -80,10 +79,12 @@ public class ChatActivity extends AppCompatActivity implements ChildEventListene
 
         conversationRef = FirebaseDatabase.getInstance()
                 .getReference(FirebaseConstants.CONVERSATIONS_MESSAGES).child(currentConversation.getId());
-//        conversationRef.addValueEventListener(this);
-
-//        DatabaseReference messagesRef = conversationRef.child(FirebaseConstants.CONVERSATIONS_MESSAGES_MESSAGES);
         conversationRef.addChildEventListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -99,6 +100,7 @@ public class ChatActivity extends AppCompatActivity implements ChildEventListene
             DatabaseReference messagesRef = conversationRef.child(FirebaseConstants.CONVERSATIONS_MESSAGES_MESSAGES);
             Message message = new Message();
             message.setAuthorId(currentUser.getUid());
+            message.setAuthorName(currentUser.getEmail());
             message.setContent(text.toString());
 
             DatabaseReference push = messagesRef.push();

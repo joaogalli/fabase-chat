@@ -21,14 +21,18 @@
         android:id="@+id/chat_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="21dp"
+        app:elevation="21dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:padding="4dp">
+        android:background="@color/primary_lighter"
+        android:padding="2dp">
 
         <EditText
             android:id="@+id/new_chat_message"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:hint="Mande uma mensagem..."
             android:layout_weight="1" />
 
         <ImageButton

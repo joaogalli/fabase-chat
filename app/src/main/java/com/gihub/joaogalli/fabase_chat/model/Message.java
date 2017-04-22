@@ -14,6 +14,8 @@ public class Message {
 
     private String authorId;
 
+    private String authorName;
+
     private long dateCreated;
 
     public Message() {
@@ -49,5 +51,13 @@ public class Message {
 
     public void setDateCreated(long dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 }

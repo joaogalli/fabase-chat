@@ -23,7 +23,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/others_chat_hdpi"
-            android:padding="20dp">
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            >
+
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Autor da mensagem"
+                android:textSize="9sp"
+                android:layout_marginBottom="2dp"/>
 
             <TextView
                 android:id="@+id/message"

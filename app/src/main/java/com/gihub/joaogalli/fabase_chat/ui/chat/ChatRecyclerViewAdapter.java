@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.gihub.joaogalli.fabase_chat.R;
 import com.gihub.joaogalli.fabase_chat.model.Message;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
@@ -87,6 +88,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         holder.item = list.get(position);
         holder.mMessageView.setText(holder.item.getContent());
 
+        if (holder.mAuthorView != null)
+            holder.mAuthorView.setText(holder.item.getAuthorName());
+
         if (holder.item.getDateCreated() > 0) {
             Date date = new Date();
             date.setTime(holder.item.getDateCreated());
@@ -117,6 +121,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         public final TextView mMessageView;
         public final TextView mHourView;
         public final ImageView mAvatarView;
+        public final TextView mAuthorView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -124,6 +129,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             mMessageView = (TextView) itemView.findViewById(R.id.message);
             mHourView = (TextView) itemView.findViewById(R.id.hour);
             mAvatarView = (ImageView) itemView.findViewById(R.id.avatar);
+            mAuthorView = (TextView) itemView.findViewById(R.id.author);
         }
     }
 
